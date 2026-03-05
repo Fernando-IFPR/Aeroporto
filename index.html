@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Aeroporto Inteligente - POO</title>
+    <style>
+        body { font-family: sans-serif; background: #f0f2f5; padding: 20px; }
+        .painel { display: flex; gap: 20px; }
+        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); width: 300px; }
+        h2 { color: #0056b3; }
+        .status { margin-top: 15px; padding: 10px; background: #eef; font-size: 0.9em; min-height: 40px; }
+        button { cursor: pointer; margin-top: 5px; width: 100%; padding: 8px; }
+    </style>
+</head>
+<body>
+    <h1>Torre de Comando - Aeroporto JS</h1>
+
+    <div class="painel">
+        <!-- Painel Jato Executivo -->
+        <div class="card">
+            <h2>Jato Executivo</h2>
+            <p>ID: <span id="id-jato"></span></p>
+            <button onclick="controlarJato('decolar')">Decolar</button>
+            <button onclick="controlarJato('super')">Ativar Supersônico</button>
+            <button onclick="controlarJato('normal')">Desativar Supersônico</button>
+            <button onclick="controlarJato('pousar')">Pousar</button>
+            <div class="status" id="status-jato">Aguardando comandos...</div>
+        </div>
+
+        <!-- Painel Voo Carga -->
+        <div class="card">
+            <h2>Voo de Carga</h2>
+            <p>ID: <span id="id-carga"></span></p>
+            <input type="number" id="peso-input" placeholder="Peso em kg">
+            <button onclick="controlarCarga('embarcar')">Embarcar Carga</button>
+            <button onclick="controlarCarga('decolar')">Decolar</button>
+            <button onclick="controlarCarga('pousar')">Pousar</button>
+            <div class="status" id="status-carga">Aguardando comandos...</div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Lógica para conectar os objetos à tela (DOM)
+        document.getElementById('id-jato').innerText = meuJato.codigo;
+        document.getElementById('id-carga').innerText = meuCargueiro.codigo;
+
+        function controlarJato(acao) {
+            let msg = "";
+            if(acao === 'decolar') msg = meuJato.decolar();
+            if(acao === 'super') msg = meuJato.ativarSupersonico();
+            if(acao === 'normal') msg = meuJato.desativarSupersonico();
+            if(acao === 'pousar') msg = meuJato.pousar();
+            
+            document.getElementById('status-jato').innerText = `${msg} | Alt: ${meuJato.altitude}pés`;
+        }
+
+        function controlarCarga(acao) {
+            let msg = "";
+            if(acao === 'embarcar') {
+                const peso = Number(document.getElementById('peso-input').value);
+                msg = meuCargueiro.embarcarCarga(peso);
+            }
+            if(acao === 'decolar') msg = meuCargueiro.decolar();
+            if(acao === 'pousar') msg = meuCargueiro.pousar();
+
+            document.getElementById('status-carga').innerText = 
+                `${msg} | Carga: ${meuCargueiro.cargaAtual}/${meuCargueiro.capacidadeMaxima}kg`;
+        }
+    </script>
+</body>
+</html>
